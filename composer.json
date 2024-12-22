@@ -1,0 +1,24 @@
+{
+    "name": "mohanedghawar/countries-info",
+    "description": "A comprehensive PHP library for accessing detailed country information",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "MohaNed Ghawar",
+            "email": "mohaned.ghawar@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "MohanedGhawar\\CountriesInfo\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    }
+}
