@@ -1,6 +1,6 @@
-# Countries Info (PHP)
+# Countries Info PHP
 
-A comprehensive PHP library for accessing detailed country information, including regions, capitals, continents, and more.
+A comprehensive PHP library for accessing detailed country information, including regions, cities, capitals, continents, and more.
 
 ## Installation
 
@@ -12,6 +12,10 @@ composer require mohanedghawar/countries-info
 
 - Complete country information (names, codes, capitals, etc.)
 - Administrative regions for all countries (states, provinces, etc.)
+- Detailed city data including:
+  - City names and populations
+  - Geographical coordinates
+  - Hierarchical organization (Country -> Region -> Cities)
 - Population and area data
 - Continent information
 - Easy-to-use API
@@ -22,48 +26,75 @@ composer require mohanedghawar/countries-info
 ```php
 use MohanedGhawar\CountriesInfo\CountriesInfo;
 
-$service = new CountriesInfo();
+$countriesInfo = new CountriesInfo();
 
 // Get all countries
-$allCountries = $service->getAllCountries();
+$countries = $countriesInfo->getAllCountries();
 
-// Get a specific country by its 3-letter code
-$usa = $service->getCountryByCode('USA');
+// Get country by code
+$usa = $countriesInfo->getCountryByCode('USA');
 
-// Get a country by name
-$france = $service->getCountryByName('France');
+// Get country by name
+$france = $countriesInfo->getCountryByName('France');
 
-// Get all regions/states of a country
-$usStates = $service->getCountryRegions('USA');
-
-// Get all countries in a continent
-$europeanCountries = $service->getCountriesByContinent('Europe');
+// Get countries by continent
+$europeanCountries = $countriesInfo->getCountriesByContinent('Europe');
 
 // Search countries by name
-$searchResults = $service->searchByName('united');
+$searchResults = $countriesInfo->searchByName('united');
+
+// Get regions (states/provinces) for a country
+$usStates = $countriesInfo->getCountryRegions('USA');
+
+// Get cities in a specific region
+$californiaCities = $countriesInfo->getCitiesByRegion('USA', 'California');
+
+// Get all cities in a country
+$allUsCities = $countriesInfo->getAllCitiesInCountry('USA');
+
+// Get total number of cities in a country
+$usCityCount = $countriesInfo->getCityCount('USA');
+
+// Search for cities across all countries
+$citiesNamedParis = $countriesInfo->searchCities('Paris');
 ```
 
 ## API Reference
 
 ### Methods
 
-#### `getAllCountries(): array`
+#### Countries
+- `getAllCountries(): array`
 Returns an array of all country objects.
 
-#### `getCountryByCode(string $code): ?array`
+- `getCountryByCode(string $code): ?array`
 Returns a country object for the given 3-letter ISO code (e.g., 'USA', 'GBR').
 
-#### `getCountryByName(string $name): ?array`
+- `getCountryByName(string $name): ?array`
 Returns a country object for the given country name.
 
-#### `getCountryRegions(string $code): array`
-Returns an array of region names for the given country code.
-
-#### `getCountriesByContinent(string $continent): array`
+- `getCountriesByContinent(string $continent): array`
 Returns an array of countries in the specified continent.
 
-#### `searchByName(string $query): array`
+- `searchByName(string $query): array`
 Returns an array of countries whose names contain the search term.
+
+#### Regions
+- `getCountryRegions(string $code): array`
+Returns an array of region names for the given country code.
+
+#### Cities
+- `getCitiesByRegion(string $countryCode, string $regionName): array`
+Returns an array of city objects for the given country code and region name.
+
+- `getAllCitiesInCountry(string $countryCode): array`
+Returns an array of city objects for the given country code.
+
+- `getCityCount(string $countryCode): int`
+Returns the total number of cities in the given country code.
+
+- `searchCities(string $name): array`
+Returns an array of city objects whose names contain the search term.
 
 ### Data Structures
 
@@ -82,9 +113,21 @@ Returns an array of countries whose names contain the search term.
 ]
 ```
 
+#### City Object
+```php
+[
+    'name' => 'Los Angeles',
+    'latitude' => '34.05223',
+    'longitude' => '-118.24368',
+    'population' => 3971883,
+    'countryCode' => 'USA',  // Only included in searchCities results
+    'regionName' => 'California'  // Only included in searchCities results
+]
+```
+
 #### Regions Array
 ```php
-// Example: $service->getCountryRegions('USA')
+// Example: $countriesInfo->getCountryRegions('USA')
 [
     'Alabama',
     'Alaska',
@@ -95,36 +138,11 @@ Returns an array of countries whose names contain the search term.
 ]
 ```
 
-## Examples
+## Data Coverage
 
-### Get US States
-```php
-$service = new CountriesInfo();
-$usStates = $service->getCountryRegions('USA');
-print_r($usStates); // ['Alabama', 'Alaska', 'Arizona', ...]
-```
-
-### Get European Countries
-```php
-$service = new CountriesInfo();
-$europeanCountries = $service->getCountriesByContinent('Europe');
-foreach ($europeanCountries as $country) {
-    echo $country['name']['common'] . "\n";
-}
-```
-
-### Search Countries
-```php
-$service = new CountriesInfo();
-$unitedCountries = $service->searchByName('united');
-foreach ($unitedCountries as $country) {
-    echo $country['name']['common'] . "\n";
-}
-// Output:
-// United States
-// United Kingdom
-// United Arab Emirates
-```
+- 250+ Countries
+- 4,000+ Regions/States
+- 150,000+ Cities worldwide
 
 ## Contributing
 
